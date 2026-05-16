@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="쏙쏙 육아일기">
+<title>🍼 쏙쏙 육아일기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.09);
+    --border-med: rgba(0,0,0,0.15);
+    --text: #1a1a1a;
+    --text-2: #666;
+    --text-3: #999;
+    --accent: #4a7c59;
+    --accent-light: #e8f2eb;
+    --accent-2: #e07a5f;
+    --accent-2-light: #fdf0ed;
+    --radius: 14px;
+    --radius-sm: 9px;
+    --tab-h: 60px;
+    --header-h: 70px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141414;
+      --surface: #1f1f1f;
+      --border: rgba(255,255,255,0.08);
+      --border-med: rgba(255,255,255,0.15);
+      --text: #f0f0f0;
+      --text-2: #999;
+      --text-3: #555;
+      --accent-light: #1e2e22;
+      --accent-2-light: #2e1e1a;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); overscroll-behavior: none; }
+  body { display: flex; flex-direction: column; max-width: 430px; margin: 0 auto; }
+
+  .header {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    height: var(--header-h); background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: flex-end; padding: 0 1.25rem 12px;
+    z-index: 100;
+  }
+  .header-inner { display: flex; align-items: center; gap: 10px; }
+  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .header-date { font-size: 13px; color: var(--text-2); margin-left: auto; }
+
+  .tabs {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    height: var(--tab-h); background: var(--surface);
+    border-top: 0.5px solid var(--border);
+    display: flex; z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tab {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 3px; border: none; background: none; color: var(--text-3);
+    font-size: 10px; font-weight: 500; cursor: pointer; transition: color 0.15s;
+  }
+  .tab i { font-size: 22px; }
+  .tab.active { color: var(--accent); }
+
+  .main {
+    margin-top: var(--header-h);
+    margin-bottom: calc(var(--tab-h) + env(safe-area-inset-bottom));
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 1rem;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card {
+    background: var(--surface); border-radius: var(--radius);
+    border: 0.5px solid var(--border); padding: 1rem 1.1rem; margin-bottom: 12px;
+  }
+  .card-title { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 13px; color: var(--text-2); margin-bottom: 5px; }
+  input[type=text], input[type=number], input[type=time], input[type=date] {
+    width: 100%; padding: 10px 12px; border: 0.5px solid var(--border-med);
+    border-radius: var(--radius-sm); font-size: 16px; background: var(--bg);
+    color: var(--text); font-family: inherit; appearance: none; -webkit-appearance: none;
+  }
+  input:focus { outline: none; border-color: var(--accent); }
+
+  .inline-fields { display: flex; gap: 8px; }
+  .inline-fields .field { flex: 1; }
+
+  .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .toggle {
+    padding: 7px 14px; border-radius: 30px; border: 0.5px solid var(--border-med);
+    font-size: 14px; cursor: pointer; background: var(--bg); color: var(--text-2);
+    font-family: inherit; font-weight: 500; transition: all 0.15s;
+  }
+  .toggle.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .btn-save {
+    width: 100%; padding: 13px; border-radius: var(--radius-sm); border: none;
+    background: var(--accent); color: #fff; font-size: 15px; font-weight: 600;
+    font-family: inherit; cursor: pointer; margin-top: 6px; transition: opacity 0.15s;
+  }
+  .btn-save:active { opacity: 0.75; }
+
+  .sec-label { font-size: 13px; font-weight: 600; color: var(--text-2); margin: 16px 0 8px; }
+
+  .log-item {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 10px 0; border-bottom: 0.5px solid var(--border);
+  }
+  .log-item:last-child { border-bottom: none; }
+  .log-main { font-size: 14px; font-weight: 500; }
+  .log-sub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+  .log-time { font-size: 13px; color: var(--text-3); white-space: nowrap; padding-left: 8px; }
+
+  .pill {
+    display: inline-block; padding: 2px 9px; border-radius: 20px;
+    font-size: 12px; font-weight: 600; margin-right: 4px;
+  }
+  .pill-green { background: var(--accent-light); color: var(--accent); }
+  .pill-orange { background: var(--accent-2-light); color: var(--accent-2); }
+  .pill-blue { background: #e6f1ff; color: #2563ab; }
+  .pill-amber { background: #fef3e2; color: #b45309; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .stat-card { background: var(--surface); border-radius: var(--radius); border: 0.5px solid var(--border); padding: 14px; }
+  .stat-card .s-label { font-size: 12px; color: var(--text-2); margin-bottom: 4px; }
+  .stat-card .s-val { font-size: 26px; font-weight: 700; color: var(--text); }
+  .stat-card .s-unit { font-size: 14px; font-weight: 400; color: var(--text-2); }
+
+  .empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-3); font-size: 14px; }
+  .empty i { font-size: 36px; display: block; margin-bottom: 8px; }
+
+  .toast {
+    position: fixed; bottom: calc(var(--tab-h) + 12px + env(safe-area-inset-bottom));
+    left: 50%; transform: translateX(-50%) translateY(10px);
+    background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 30px;
+    font-size: 14px; font-weight: 500; opacity: 0; transition: all 0.25s;
+    z-index: 999; white-space: nowrap; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .loading { text-align: center; padding: 2rem; color: var(--text-3); font-size: 14px; }
+
+  canvas { display: block; width: 100% !important; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner" style="width:100%">
+    <span style="font-size:24px">🍼</span>
+    <h1>쏙쏙 육아일기</h1>
+    <span class="header-date" id="today-label"></span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- 수유 -->
+  <div class="section active" id="sec-feeding">
+    <div class="card">
+      <div class="card-title">수유 기록</div>
+      <div class="field">
+        <label>시간</label>
+        <input type="time" id="f-time">
+      </div>
+      <div class="field">
+        <label>방법</label>
+        <div class="toggle-group" id="g-fmethod">
+          <button class="toggle on" data-val="모유" onclick="pick('g-fmethod',this)">모유</button>
+          <button class="toggle" data-val="분유" onclick="pick('g-fmethod',this)">분유</button>
+          <button class="toggle" data-val="혼합" onclick="pick('g-fmethod',this)">혼합</button>
+        </div>
+      </div>
+      <div id="breast-fields">
+        <div class="inline-fields">
+          <div class="field"><label>왼쪽 (분)</label><input type="number" id="f-left" placeholder="0"></div>
+          <div class="field"><label>오른쪽 (분)</label><input type="number" id="f-right" placeholder="0"></div>
+        </div>
+      </div>
+      <div id="formula-fields" style="display:none">
+        <div class="field"><label>양 (ml)</label><input type="number" id="f-ml" placeholder="0"></div>
+      </div>
+      <div class="field"><label>메모 (선택)</label><input type="text" id="f-memo" placeholder="예: 잘 먹음, 토함"></div>
+      <button class="btn-save" onclick="saveFeeding()">저장</button>
+    </div>
+    <div class="sec-label">오늘 수유 기록</div>
+    <div class="card" id="feeding-log"><div class="loading">불러오는 중...</div></div>
+  </div>
+
+  <!-- 대소변 -->
+  <div class="section" id="sec-diaper">
+    <div class="card">
+      <div class="card-title">기저귀 기록</div>
+      <div class="field">
+        <label>시간</label>
+        <input type="time" id="d-time">
+      </div>
+      <div class="field">
+        <label>종류</label>
+        <div class="toggle-group" id="g-dtype">
+          <button class="toggle on" data-val="소변" onclick="pick('g-dtype',this)">소변 💧</button>
+          <button class="toggle" data-val="대변" onclick="pick('g-dtype',this)">대변 💩</button>
+          <button class="toggle" data-val="둘다" onclick="pick('g-dtype',this)">둘다</button>
+        </div>
+      </div>
+      <div id="poop-fields" style="display:none">
+        <div class="field">
+          <label>대변 색깔</label>
+          <div class="toggle-group" id="g-dcolor">
+            <button class="toggle on" data-val="노란색" onclick="pick('g-dcolor',this)">노란색</button>
+            <button class="toggle" data-val="갈색" onclick="pick('g-dcolor',this)">갈색</button>
+            <button class="toggle" data-val="녹색" onclick="pick('g-dcolor',this)">녹색</button>
+            <button class="toggle" data-val="기타" onclick="pick('g-dcolor',this)">기타</button>
+          </div>
+        </div>
+      </div>
+      <div class="field"><label>메모 (선택)</label><input type="text" id="d-memo" placeholder="예: 묽음, 과립형"></div>
+      <button class="btn-save" onclick="saveDiaper()">저장</button>
+    </div>
+    <div class="sec-label">오늘 기저귀 기록</div>
+    <div class="card" id="diaper-log"><div class="loading">불러오는 중...</div></div>
+  </div>
+
+  <!-- 성장 -->
+  <div class="section" id="sec-growth">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="s-label">최근 몸무게</div><div class="s-val" id="s-weight">-<span class="s-unit"> g</span></div></div>
+      <div class="stat-card"><div class="s-label">최근 체온</div><div class="s-val" id="s-temp">-<span class="s-unit"> °C</span></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">몸무게 기록</div>
+      <div class="field"><label>날짜</label><input type="date" id="w-date"></div>
+      <div class="field"><label>몸무게 (g)</label><input type="number" id="w-val" placeholder="예: 3500"></div>
+      <button class="btn-save" onclick="saveWeight()">저장</button>
+    </div>
+    <div class="card">
+      <div class="card-title">체온 기록</div>
+      <div class="field"><label>시간</label><input type="time" id="t-time"></div>
+      <div class="inline-fields">
+        <div class="field"><label>체온 (°C)</label><input type="number" id="t-val" placeholder="36.5" step="0.1"></div>
+        <div class="field">
+          <label>측정 부위</label>
+          <div class="toggle-group" id="g-tloc" style="margin-top:2px">
+            <button class="toggle on" data-val="겨드랑이" onclick="pick('g-tloc',this)" style="padding:10px 10px;font-size:13px">겨드랑이</button>
+            <button class="toggle" data-val="항문" onclick="pick('g-tloc',this)" style="padding:10px 10px;font-size:13px">항문</button>
+            <button class="toggle" data-val="귀" onclick="pick('g-tloc',this)" style="padding:10px 10px;font-size:13px">귀</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn-save" onclick="saveTemp()">저장</button>
+    </div>
+  </div>
+
+  <!-- 그래프 -->
+  <div class="section" id="sec-chart">
+    <div class="stat-grid" id="today-stats">
+      <div class="stat-card"><div class="s-label">오늘 수유</div><div class="s-val" id="cs-feed">-<span class="s-unit"> 회</span></div></div>
+      <div class="stat-card"><div class="s-label">오늘 기저귀</div><div class="s-val" id="cs-diaper">-<span class="s-unit"> 회</span></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">최근 7일 수유 횟수</div>
+      <canvas id="chart-feed" height="160"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">몸무게 추이</div>
+      <canvas id="chart-weight" height="160"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">체온 추이</div>
+      <canvas id="chart-temp" height="160"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<!-- 탭 바 -->
+<nav class="tabs">
+  <button class="tab active" onclick="goTab('feeding',this)"><i class="ti ti-droplet"></i>수유</button>
+  <button class="tab" onclick="goTab('diaper',this)"><i class="ti ti-circle"></i>기저귀</button>
+  <button class="tab" onclick="goTab('growth',this)"><i class="ti ti-weight"></i>성장</button>
+  <button class="tab" onclick="goTab('chart',this)"><i class="ti ti-chart-line"></i>그래프</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GAS = 'https://script.google.com/macros/s/AKfycby5rKerPDnJtVeCJuEeV4aknyt4A4_1pI2G2Mrr8fbW1PIW47FA60HCVlMk42YxfM2N/exec';
+
+const now = new Date();
+const todayStr = now.toLocaleDateString('sv-SE');
+const days = ['일','월','화','수','목','금','토'];
+document.getElementById('today-label').textContent = todayStr.slice(5).replace('-','/') + ' (' + days[now.getDay()] + ')';
+
+function pad(n){ return String(n).padStart(2,'0'); }
+const t = pad(now.getHours())+':'+pad(now.getMinutes());
+['f-time','d-time','t-time'].forEach(id => { const el=document.getElementById(id); if(el) el.value=t; });
+document.getElementById('w-date').value = todayStr;
+
+function goTab(name, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  el.classList.add('active');
+  if(name==='chart') loadCharts();
+}
+
+function pick(groupId, el){
+  document.querySelectorAll('#'+groupId+' .toggle').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  if(groupId==='g-fmethod'){
+    const v=el.dataset.val;
+    document.getElementById('breast-fields').style.display=(v==='모유'||v==='혼합')?'':'none';
+    document.getElementById('formula-fields').style.display=(v==='분유'||v==='혼합')?'':'none';
+  }
+  if(groupId==='g-dtype'){
+    const v=el.dataset.val;
+    document.getElementById('poop-fields').style.display=(v==='대변'||v==='둘다')?'':'none';
+  }
+}
+
+function getVal(groupId){ const el=document.querySelector('#'+groupId+' .toggle.on'); return el?el.dataset.val:''; }
+
+function toast(msg, ok=true){
+  const el=document.getElementById('toast');
+  el.textContent=(ok?'✓ ':'✗ ')+msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+async function post(sheet, row){
+  try{
+    const r = await fetch(GAS,{method:'POST',body:JSON.stringify({sheet,action:'append',row})});
+    return true;
+  }catch(e){ return false; }
+}
+
+async function get(sheet){
+  try{
+    const r = await fetch(GAS+'?sheet='+sheet);
+    const data = await r.json();
+    return Array.isArray(data)?data:[];
+  }catch(e){ return []; }
+}
+
+async function saveFeeding(){
+  const time=document.getElementById('f-time').value;
+  const method=getVal('g-fmethod');
+  const left=document.getElementById('f-left').value||'';
+  const right=document.getElementById('f-right').value||'';
+  const ml=document.getElementById('f-ml').value||'';
+  const memo=document.getElementById('f-memo').value||'';
+  if(!time){toast('시간을 입력해주세요',false);return;}
+  if(await post('feeding',[todayStr,time,method,left,right,ml,memo])){
+    toast('수유 기록 저장 완료!');
+    document.getElementById('f-memo').value='';
+    loadFeedingLog();
+  } else toast('저장 실패. 잠시 후 다시 시도해주세요',false);
+}
+
+async function saveDiaper(){
+  const time=document.getElementById('d-time').value;
+  const type=getVal('g-dtype');
+  const color=(type==='대변'||type==='둘다')?getVal('g-dcolor'):'';
+  const memo=document.getElementById('d-memo').value||'';
+  if(!time){toast('시간을 입력해주세요',false);return;}
+  if(await post('diaper',[todayStr,time,type,color,memo])){
+    toast('기저귀 기록 저장 완료!');
+    document.getElementById('d-memo').value='';
+    loadDiaperLog();
+  } else toast('저장 실패',false);
+}
+
+async function saveWeight(){
+  const date=document.getElementById('w-date').value;
+  const val=document.getElementById('w-val').value;
+  if(!date||!val){toast('날짜와 몸무게를 입력해주세요',false);return;}
+  if(await post('weight',[date,parseFloat(val)])){
+    toast('몸무게 저장 완료!');
+    document.getElementById('w-val').value='';
+    document.getElementById('s-weight').innerHTML=parseFloat(val).toLocaleString()+'<span class="s-unit"> g</span>';
+  } else toast('저장 실패',false);
+}
+
+async function saveTemp(){
+  const time=document.getElementById('t-time').value;
+  const val=document.getElementById('t-val').value;
+  const loc=getVal('g-tloc');
+  if(!time||!val){toast('시간과 체온을 입력해주세요',false);return;}
+  if(await post('temperature',[todayStr,time,parseFloat(val),loc])){
+    toast('체온 저장 완료!');
+    document.getElementById('t-val').value='';
+    document.getElementById('s-temp').innerHTML=parseFloat(val).toFixed(1)+'<span class="s-unit"> °C</span>';
+  } else toast('저장 실패',false);
+}
+
+async function loadFeedingLog(){
+  const el=document.getElementById('feeding-log');
+  const data=await get('feeding');
+  const rows=data.filter(r=>r[0]===todayStr).reverse();
+  if(!rows.length){el.innerHTML='<div class="empty"><i class="ti ti-droplet-off"></i>오늘 수유 기록이 없어요</div>';return;}
+  el.innerHTML=rows.map(r=>{
+    const m=r[2]||''; const left=r[3]; const right=r[4]; const ml=r[5]; const memo=r[6]||'';
+    let detail='';
+    if(left||right) detail=`왼쪽 ${left||0}분 / 오른쪽 ${right||0}분`;
+    if(ml) detail+=(detail?' · ':'')+ml+'ml';
+    const pc=m==='모유'?'pill-green':m==='분유'?'pill-blue':'pill-amber';
+    return `<div class="log-item"><div><div class="log-main"><span class="pill ${pc}">${m}</span>${detail}</div>${memo?`<div class="log-sub">${memo}</div>`:''}</div><div class="log-time">${r[1]}</div></div>`;
+  }).join('');
+}
+
+async function loadDiaperLog(){
+  const el=document.getElementById('diaper-log');
+  const data=await get('diaper');
+  const rows=data.filter(r=>r[0]===todayStr).reverse();
+  if(!rows.length){el.innerHTML='<div class="empty"><i class="ti ti-circle-off"></i>오늘 기저귀 기록이 없어요</div>';return;}
+  el.innerHTML=rows.map(r=>{
+    const type=r[2]||''; const color=r[3]||''; const memo=r[4]||'';
+    const pc=type==='소변'?'pill-blue':'pill-amber';
+    return `<div class="log-item"><div><div class="log-main"><span class="pill ${pc}">${type}</span>${color?' '+color:''}</div>${memo?`<div class="log-sub">${memo}</div>`:''}</div><div class="log-time">${r[1]}</div></div>`;
+  }).join('');
+}
+
+let chartsReady=false;
+async function loadCharts(){
+  if(chartsReady) return; chartsReady=true;
+  const [feedData,diaperData,weightData,tempData]=await Promise.all([get('feeding'),get('diaper'),get('weight'),get('temperature')]);
+
+  document.getElementById('cs-feed').innerHTML=feedData.filter(r=>r[0]===todayStr).length+'<span class="s-unit"> 회</span>';
+  document.getElementById('cs-diaper').innerHTML=diaperData.filter(r=>r[0]===todayStr).length+'<span class="s-unit"> 회</span>';
+
+  const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const grid=dark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
+  const tick=dark?'rgba(255,255,255,0.4)':'rgba(0,0,0,0.35)';
+
+  const days7=[];
+  for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);days7.push(d.toLocaleDateString('sv-SE'));}
+  const labels7=days7.map(d=>d.slice(5).replace('-','/'));
+  const counts7=days7.map(d=>feedData.filter(r=>r[0]===d).length);
+
+  new Chart(document.getElementById('chart-feed'),{
+    type:'bar',
+    data:{labels:labels7,datasets:[{data:counts7,backgroundColor:'#4a7c5988',borderRadius:6,borderSkipped:false}]},
+    options:{plugins:{legend:{display:false}},scales:{y:{ticks:{stepSize:1,color:tick},grid:{color:grid},border:{display:false}},x:{ticks:{color:tick},grid:{display:false},border:{display:false}}}}
+  });
+
+  const wRows=weightData.filter(r=>r[0]&&r[1]).sort((a,b)=>a[0]>b[0]?1:-1).slice(-12);
+  if(wRows.length){
+    document.getElementById('s-weight').innerHTML=parseFloat(wRows[wRows.length-1][1]).toLocaleString()+'<span class="s-unit"> g</span>';
+    new Chart(document.getElementById('chart-weight'),{
+      type:'line',
+      data:{labels:wRows.map(r=>String(r[0]).slice(5).replace('-','/')),datasets:[{data:wRows.map(r=>parseFloat(r[1])),borderColor:'#4a7c59',backgroundColor:'rgba(74,124,89,0.1)',tension:0.35,fill:true,pointRadius:4,pointBackgroundColor:'#4a7c59'}]},
+      options:{plugins:{legend:{display:false}},scales:{y:{ticks:{color:tick,callback:v=>v.toLocaleString()+'g'},grid:{color:grid},border:{display:false}},x:{ticks:{color:tick},grid:{display:false},border:{display:false}}}}
+    });
+  } else document.getElementById('chart-weight').insertAdjacentHTML('afterend','<div class="empty" style="padding:1rem">몸무게 데이터가 없어요</div>');
+
+  const tRows=tempData.filter(r=>r[0]&&r[2]).sort((a,b)=>a[0]===b[0]?a[1]>b[1]?1:-1:a[0]>b[0]?1:-1).slice(-20);
+  if(tRows.length){
+    document.getElementById('s-temp').innerHTML=parseFloat(tRows[tRows.length-1][2]).toFixed(1)+'<span class="s-unit"> °C</span>';
+    new Chart(document.getElementById('chart-temp'),{
+      type:'line',
+      data:{labels:tRows.map(r=>String(r[0]).slice(5)+' '+r[1]),datasets:[{data:tRows.map(r=>parseFloat(r[2])),borderColor:'#e07a5f',backgroundColor:'rgba(224,122,95,0.1)',tension:0.35,fill:true,pointRadius:4,pointBackgroundColor:'#e07a5f'}]},
+      options:{plugins:{legend:{display:false}},scales:{y:{min:35,max:40,ticks:{color:tick,callback:v=>v+'°'},grid:{color:grid},border:{display:false}},x:{ticks:{display:false},grid:{display:false},border:{display:false}}}}
+    });
+  } else document.getElementById('chart-temp').insertAdjacentHTML('afterend','<div class="empty" style="padding:1rem">체온 데이터가 없어요</div>');
+}
+
+loadFeedingLog();
+loadDiaperLog();
+</script>
+</body>
+</html>
