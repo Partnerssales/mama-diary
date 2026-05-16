@@ -31,46 +31,36 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; font-family: -apple-system, 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); overscroll-behavior: none; }
   body { display: flex; flex-direction: column; max-width: 430px; margin: 0 auto; }
-
   .header { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; height: var(--header-h); background: var(--surface); border-bottom: 0.5px solid var(--border); display: flex; align-items: flex-end; padding: 0 1.25rem 12px; z-index: 100; }
   .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
   .header-date { font-size: 13px; color: var(--text-2); margin-left: auto; }
-
   .tabs { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; height: var(--tab-h); background: var(--surface); border-top: 0.5px solid var(--border); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
   .tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: none; background: none; color: var(--text-3); font-size: 10px; font-weight: 500; cursor: pointer; transition: color 0.15s; }
   .tab i { font-size: 22px; }
   .tab.active { color: var(--accent); }
-
   .main { margin-top: var(--header-h); margin-bottom: calc(var(--tab-h) + env(safe-area-inset-bottom)); overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 1rem; }
   .section { display: none; }
   .section.active { display: block; }
-
   .card { background: var(--surface); border-radius: var(--radius); border: 0.5px solid var(--border); padding: 1rem 1.1rem; margin-bottom: 12px; }
   .card-title { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-
   .field { margin-bottom: 10px; }
   .field label { display: block; font-size: 13px; color: var(--text-2); margin-bottom: 5px; }
   input[type=text], input[type=number], input[type=time], input[type=date] { width: 100%; padding: 10px 12px; border: 0.5px solid var(--border-med); border-radius: var(--radius-sm); font-size: 16px; background: var(--bg); color: var(--text); font-family: inherit; appearance: none; -webkit-appearance: none; }
   input:focus { outline: none; border-color: var(--accent); }
   .inline-fields { display: flex; gap: 8px; }
   .inline-fields .field { flex: 1; }
-
   .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
   .toggle { padding: 7px 14px; border-radius: 30px; border: 0.5px solid var(--border-med); font-size: 14px; cursor: pointer; background: var(--bg); color: var(--text-2); font-family: inherit; font-weight: 500; transition: all 0.15s; }
   .toggle.on { background: var(--accent); color: #fff; border-color: var(--accent); }
-
   .btn-save { width: 100%; padding: 13px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; margin-top: 6px; transition: opacity 0.15s; }
   .btn-save:active { opacity: 0.75; }
   .btn-ghost { width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-med); background: var(--bg); color: var(--text-2); font-size: 13px; font-family: inherit; cursor: pointer; margin-top: 8px; }
-
   .notif-banner { background: #fff8e1; border: 0.5px solid #f0c040; border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 13px; color: #7a5a00; }
   .notif-banner button { margin-left: auto; padding: 6px 12px; border-radius: 20px; border: none; background: #f0c040; color: #3a2a00; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; white-space: nowrap; }
-
   .timer-setting { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
   .timer-setting label { font-size: 13px; color: var(--text-2); white-space: nowrap; }
   .timer-setting input { width: 52px; text-align: center; padding: 6px 8px; font-size: 15px; font-weight: 700; }
   .timer-setting span { font-size: 13px; color: var(--text-2); }
-
   .breast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .breast-box { border-radius: var(--radius-sm); border: 0.5px solid var(--border-med); padding: 14px 10px; text-align: center; background: var(--bg); transition: all 0.2s; }
   .breast-box.active-left { border-color: var(--accent); background: var(--accent-light); }
@@ -84,33 +74,26 @@
   .btn-left.running { background: var(--red); }
   .btn-right { background: var(--accent-2); color: #fff; }
   .btn-right.running { background: var(--red); }
-
   .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; color: var(--text-2); }
   .total-row strong { color: var(--text); font-size: 15px; }
-
   .timer-alert { display: none; background: var(--red-light); border: 0.5px solid var(--red); border-radius: var(--radius-sm); padding: 12px; text-align: center; font-size: 15px; font-weight: 700; color: var(--red); margin-bottom: 10px; }
   .timer-alert.show { display: block; animation: pulse 0.5s ease 3; }
   @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
-
   .sec-label { font-size: 13px; font-weight: 600; color: var(--text-2); margin: 16px 0 8px; }
   .log-item { display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
   .log-item:last-child { border-bottom: none; }
   .log-main { font-size: 14px; font-weight: 500; }
   .log-sub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
   .log-time { font-size: 13px; color: var(--text-3); white-space: nowrap; padding-left: 8px; }
-
   .pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-right: 4px; }
   .pill-green { background: var(--accent-light); color: var(--accent); }
-  .pill-orange { background: var(--accent-2-light); color: var(--accent-2); }
   .pill-blue { background: #e6f1ff; color: #2563ab; }
   .pill-amber { background: #fef3e2; color: #b45309; }
-
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .stat-card { background: var(--surface); border-radius: var(--radius); border: 0.5px solid var(--border); padding: 14px; }
   .stat-card .s-label { font-size: 12px; color: var(--text-2); margin-bottom: 4px; }
   .stat-card .s-val { font-size: 26px; font-weight: 700; color: var(--text); }
   .stat-card .s-unit { font-size: 14px; font-weight: 400; color: var(--text-2); }
-
   .empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-3); font-size: 14px; }
   .empty i { font-size: 36px; display: block; margin-bottom: 8px; }
   .toast { position: fixed; bottom: calc(var(--tab-h) + 12px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(10px); background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 30px; font-size: 14px; font-weight: 500; opacity: 0; transition: all 0.25s; z-index: 999; white-space: nowrap; pointer-events: none; }
@@ -130,15 +113,12 @@
 </div>
 
 <div class="main">
-
   <div class="section active" id="sec-feeding">
-
     <div class="notif-banner" id="notif-banner" style="display:none">
       <i class="ti ti-bell" style="font-size:18px;flex-shrink:0"></i>
       <span>타이머 알림을 받으려면 권한이 필요해요</span>
       <button onclick="requestNotif()">허용하기</button>
     </div>
-
     <div class="card">
       <div class="card-title">수유 타이머</div>
       <div class="timer-setting">
@@ -168,7 +148,6 @@
       <button class="btn-save" onclick="saveTimerFeeding()">타이머 기록 저장</button>
       <button class="btn-ghost" onclick="resetTimer()">초기화</button>
     </div>
-
     <div class="card">
       <div class="card-title">직접 입력</div>
       <div class="field"><label>시간</label><input type="time" id="f-time"></div>
@@ -192,7 +171,6 @@
       <div class="field"><label>메모 (선택)</label><input type="text" id="f-memo" placeholder="예: 잘 먹음, 토함"></div>
       <button class="btn-save" onclick="saveFeeding()">저장</button>
     </div>
-
     <div class="sec-label">오늘 수유 기록</div>
     <div class="card" id="feeding-log"><div class="loading">불러오는 중...</div></div>
   </div>
@@ -265,7 +243,6 @@
     <div class="card"><div class="card-title">몸무게 추이</div><canvas id="chart-weight" height="160"></canvas></div>
     <div class="card"><div class="card-title">체온 추이</div><canvas id="chart-temp" height="160"></canvas></div>
   </div>
-
 </div>
 
 <nav class="tabs">
@@ -277,16 +254,49 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const GAS = 'https://script.google.com/macros/s/AKfycby5rKerPDnJtVeCJuEeV4aknyt4A4_1pI2G2Mrr8fbW1PIW47FA60HCVlMk42YxfM2N/exec';
-const now = new Date();
-const todayStr = now.toLocaleDateString('sv-SE');
-const DAYS = ['일','월','화','수','목','금','토'];
-document.getElementById('today-label').textContent = todayStr.slice(5).replace('-','/') + ' (' + DAYS[now.getDay()] + ')';
-function pad(n){ return String(n).padStart(2,'0'); }
-const nowT = pad(now.getHours())+':'+pad(now.getMinutes());
+const GAS='https://script.google.com/macros/s/AKfycby5rKerPDnJtVeCJuEeV4aknyt4A4_1pI2G2Mrr8fbW1PIW47FA60HCVlMk42YxfM2N/exec';
+const now=new Date();
+const todayStr=now.toLocaleDateString('sv-SE');
+const DAYS=['일','월','화','수','목','금','토'];
+document.getElementById('today-label').textContent=todayStr.slice(5).replace('-','/')+' ('+DAYS[now.getDay()]+')';
+function pad(n){return String(n).padStart(2,'0');}
+const nowT=pad(now.getHours())+':'+pad(now.getMinutes());
 ['f-time','d-time','t-time'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=nowT;});
 document.getElementById('w-date').value=todayStr;
 
+// ── 오디오 컨텍스트 (탭할 때 미리 활성화) ──
+let audioCtx=null;
+function unlockAudio(){
+  try{
+    if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    // 무음 버퍼로 iOS 잠금 해제
+    const buf=audioCtx.createBuffer(1,1,22050);
+    const src=audioCtx.createBufferSource();
+    src.buffer=buf; src.connect(audioCtx.destination); src.start(0);
+  }catch(e){}
+}
+function playAlarm(){
+  try{
+    if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume().then(()=>doBeep());
+    else doBeep();
+  }catch(e){}
+  if(navigator.vibrate) navigator.vibrate([500,150,500,150,500]);
+}
+function doBeep(){
+  [0,400,800].forEach(d=>{
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value=880;
+    g.gain.setValueAtTime(0.7,audioCtx.currentTime+d/1000);
+    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d/1000+0.9);
+    o.start(audioCtx.currentTime+d/1000);
+    o.stop(audioCtx.currentTime+d/1000+0.9);
+  });
+}
+
+// ── 알림 권한 ──
 function checkNotifBanner(){
   if(!('Notification' in window))return;
   if(Notification.permission==='default') document.getElementById('notif-banner').style.display='flex';
@@ -298,40 +308,23 @@ async function requestNotif(){
 }
 checkNotifBanner();
 
-const S = {
-  left:  {running:false, startTs:null, startTime:'', elapsed:0, ivId:null, alId:null},
-  right: {running:false, startTs:null, startTime:'', elapsed:0, ivId:null, alId:null}
+// ── 타이머 상태 ──
+const S={
+  left: {running:false,startTs:null,startTime:'',elapsed:0,ivId:null,alId:null},
+  right:{running:false,startTs:null,startTime:'',elapsed:0,ivId:null,alId:null}
 };
-
-function fmtSec(s){ return pad(Math.floor(s/60))+':'+pad(s%60); }
-function fmtMin(s){ return Math.floor(s/60)+'분 '+(s%60)+'초'; }
-
-function playAlarm(){
-  try{
-    const ctx=new(window.AudioContext||window.webkitAudioContext)();
-    [0,350,700].forEach(d=>{
-      const o=ctx.createOscillator(),g=ctx.createGain();
-      o.connect(g);g.connect(ctx.destination);
-      o.frequency.value=880;
-      g.gain.setValueAtTime(0.5,ctx.currentTime+d/1000);
-      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+d/1000+0.6);
-      o.start(ctx.currentTime+d/1000);o.stop(ctx.currentTime+d/1000+0.6);
-    });
-  }catch(e){}
-  if(navigator.vibrate) navigator.vibrate([400,150,400,150,400]);
-}
+function fmtSec(s){return pad(Math.floor(s/60))+':'+pad(s%60);}
+function fmtMin(s){return Math.floor(s/60)+'분 '+(s%60)+'초';}
 
 function fireAlarm(side){
   playAlarm();
   const ko=side==='left'?'왼쪽':'오른쪽';
   const min=document.getElementById('timer-min').value;
-  const alertEl=document.getElementById('timer-alert');
-  alertEl.textContent=`⏰ ${ko} ${min}분 경과! 수유를 확인하세요!`;
-  alertEl.classList.remove('show');
-  void alertEl.offsetWidth;
-  alertEl.classList.add('show');
-  if('Notification' in window && Notification.permission==='granted'){
-    new Notification('🍼 수유 타이머',{body:`${ko} 수유 ${min}분이 됐어요!`,tag:'feed-timer'});
+  const el=document.getElementById('timer-alert');
+  el.textContent='⏰ '+ko+' '+min+'분 경과! 수유를 확인하세요!';
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  if('Notification' in window&&Notification.permission==='granted'){
+    new Notification('🍼 수유 타이머',{body:ko+' 수유 '+min+'분이 됐어요!',tag:'feed-timer'});
   }
 }
 
@@ -341,6 +334,7 @@ function toggleBreast(side){
   const box=document.getElementById('box-'+side);
   const startEl=document.getElementById('start-'+side);
   if(!s.running){
+    unlockAudio(); // ← 탭 시점에 오디오 컨텍스트 활성화
     s.running=true;
     s.startTs=Date.now()-s.elapsed*1000;
     const n=new Date();
@@ -349,8 +343,7 @@ function toggleBreast(side){
     btn.textContent='중지'; btn.classList.add('running');
     box.classList.add('active-'+side);
     document.getElementById('timer-alert').classList.remove('show');
-    const alarmMs=parseInt(document.getElementById('timer-min').value||5)*60*1000;
-    const remaining=alarmMs-s.elapsed*1000;
+    const remaining=parseInt(document.getElementById('timer-min').value||5)*60*1000-s.elapsed*1000;
     if(remaining>0) s.alId=setTimeout(()=>fireAlarm(side),remaining);
     s.ivId=setInterval(()=>{
       s.elapsed=Math.round((Date.now()-s.startTs)/1000);
@@ -370,7 +363,6 @@ function toggleBreast(side){
 function updateTotal(){
   document.getElementById('total-time').textContent=fmtMin(S.left.elapsed+S.right.elapsed);
 }
-
 function resetTimer(){
   ['left','right'].forEach(side=>{
     const s=S[side];
@@ -385,14 +377,13 @@ function resetTimer(){
   document.getElementById('total-time').textContent='0분 0초';
   document.getElementById('timer-alert').classList.remove('show');
 }
-
 async function saveTimerFeeding(){
   if(S.left.elapsed===0&&S.right.elapsed===0){toast('타이머를 먼저 시작해주세요',false);return;}
   ['left','right'].forEach(s=>{if(S[s].running) toggleBreast(s);});
   const leftMin=(S.left.elapsed/60).toFixed(1);
   const rightMin=(S.right.elapsed/60).toFixed(1);
   const startTime=S.left.startTime||S.right.startTime||nowT;
-  const memo=`왼쪽 ${fmtMin(S.left.elapsed)} / 오른쪽 ${fmtMin(S.right.elapsed)}`;
+  const memo='왼쪽 '+fmtMin(S.left.elapsed)+' / 오른쪽 '+fmtMin(S.right.elapsed);
   if(await post('feeding',[todayStr,startTime,'모유',leftMin,rightMin,'',memo])){
     toast('수유 기록 저장 완료!'); resetTimer(); loadFeedingLog();
   } else toast('저장 실패',false);
@@ -405,7 +396,6 @@ function goTab(name,el){
   el.classList.add('active');
   if(name==='chart') loadCharts();
 }
-
 function pick(groupId,el){
   document.querySelectorAll('#'+groupId+' .toggle').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
@@ -420,14 +410,12 @@ function pick(groupId,el){
   }
 }
 function getVal(g){const el=document.querySelector('#'+g+' .toggle.on');return el?el.dataset.val:'';}
-
 function toast(msg,ok=true){
   const el=document.getElementById('toast');
   el.textContent=(ok?'✓ ':'✗ ')+msg;
   el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),2500);
 }
-
 async function post(sheet,row){
   try{await fetch(GAS,{method:'POST',body:JSON.stringify({sheet,action:'append',row})});return true;}
   catch(e){return false;}
@@ -436,7 +424,6 @@ async function get(sheet){
   try{const r=await fetch(GAS+'?sheet='+sheet);const d=await r.json();return Array.isArray(d)?d:[];}
   catch(e){return[];}
 }
-
 async function saveFeeding(){
   const time=document.getElementById('f-time').value;
   const method=getVal('g-fmethod');
@@ -478,7 +465,6 @@ async function saveTemp(){
     document.getElementById('s-temp').innerHTML=parseFloat(val).toFixed(1)+'<span class="s-unit"> °C</span>';
   } else toast('저장 실패',false);
 }
-
 async function loadFeedingLog(){
   const el=document.getElementById('feeding-log');
   const data=await get('feeding');
@@ -487,10 +473,10 @@ async function loadFeedingLog(){
   el.innerHTML=rows.map(r=>{
     const m=r[2]||'';const left=r[3];const right=r[4];const ml=r[5];const memo=r[6]||'';
     let detail='';
-    if(left||right) detail=`왼쪽 ${left||0}분 / 오른쪽 ${right||0}분`;
+    if(left||right) detail='왼쪽 '+(left||0)+'분 / 오른쪽 '+(right||0)+'분';
     if(ml) detail+=(detail?' · ':'')+ml+'ml';
     const pc=m==='모유'?'pill-green':m==='분유'?'pill-blue':'pill-amber';
-    return `<div class="log-item"><div><div class="log-main"><span class="pill ${pc}">${m}</span>${detail}</div>${memo?`<div class="log-sub">${memo}</div>`:''}</div><div class="log-time">${r[1]}</div></div>`;
+    return '<div class="log-item"><div><div class="log-main"><span class="pill '+pc+'">'+m+'</span>'+detail+'</div>'+(memo?'<div class="log-sub">'+memo+'</div>':'')+'</div><div class="log-time">'+r[1]+'</div></div>';
   }).join('');
 }
 async function loadDiaperLog(){
@@ -501,10 +487,9 @@ async function loadDiaperLog(){
   el.innerHTML=rows.map(r=>{
     const type=r[2]||'';const color=r[3]||'';const memo=r[4]||'';
     const pc=type==='소변'?'pill-blue':'pill-amber';
-    return `<div class="log-item"><div><div class="log-main"><span class="pill ${pc}">${type}</span>${color?' '+color:''}</div>${memo?`<div class="log-sub">${memo}</div>`:''}</div><div class="log-time">${r[1]}</div></div>`;
+    return '<div class="log-item"><div><div class="log-main"><span class="pill '+pc+'">'+type+'</span>'+(color?' '+color:'')+'</div>'+(memo?'<div class="log-sub">'+memo+'</div>':'')+'</div><div class="log-time">'+r[1]+'</div></div>';
   }).join('');
 }
-
 let chartsReady=false;
 async function loadCharts(){
   if(chartsReady)return; chartsReady=true;
@@ -528,7 +513,6 @@ async function loadCharts(){
     new Chart(document.getElementById('chart-temp'),{type:'line',data:{labels:tRows.map(r=>String(r[0]).slice(5)+' '+r[1]),datasets:[{data:tRows.map(r=>parseFloat(r[2])),borderColor:'#e07a5f',backgroundColor:'rgba(224,122,95,0.1)',tension:0.35,fill:true,pointRadius:4,pointBackgroundColor:'#e07a5f'}]},options:{plugins:{legend:{display:false}},scales:{y:{min:35,max:40,ticks:{color:tick,callback:v=>v+'°'},grid:{color:grid},border:{display:false}},x:{ticks:{display:false},grid:{display:false},border:{display:false}}}}});
   } else document.getElementById('chart-temp').insertAdjacentHTML('afterend','<div class="empty" style="padding:1rem">체온 데이터가 없어요</div>');
 }
-
 loadFeedingLog();
 loadDiaperLog();
 </script>
